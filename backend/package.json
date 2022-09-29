@@ -1,0 +1,11 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "Nodejs backend parsing formula input and getting the data from the IAEA API",
+  "main": "index.js",
+  "author": "Christopher Ricketts",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.1"
+  }
+}
