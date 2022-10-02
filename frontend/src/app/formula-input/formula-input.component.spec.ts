@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 import { FormulaInputComponent } from './formula-input.component';
 
@@ -8,7 +9,10 @@ describe('FormulaInputComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ FormulaInputComponent ]
+      declarations: [ FormulaInputComponent ],
+      imports: [
+        MatAutocompleteModule
+      ]
     })
     .compileComponents();
 
