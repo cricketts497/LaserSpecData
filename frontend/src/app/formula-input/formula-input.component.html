@@ -6,6 +6,8 @@
             matInput
             [formControl]="formulaControl"
             [matAutocomplete]="auto">
+    <mat-error *ngIf="formulaControl.errors?.['required']">Formula is required</mat-error>
+    <mat-error *ngIf="formulaControl.errors?.['pattern']">Invalid formula</mat-error>
     <mat-autocomplete #auto="matAutocomplete">
       <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
         {{option}}
