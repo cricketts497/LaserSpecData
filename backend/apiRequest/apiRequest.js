@@ -1,7 +1,7 @@
-var https = require('https');
+const https = require('https');
 
 const parseErrorCode = (code) => {
-  if (code == 0) {
+  if (code === '0\n') {
     return 'Not found';
   }
   return 'Unknown error';
@@ -9,27 +9,28 @@ const parseErrorCode = (code) => {
 
 const get = (field, nuclide) => {
   return new Promise((resolve, reject) => {
-    let req = https.request(`https://nds.iaea.org/relnsd/v0/data?fields=${field}&nuclides=${nuclide}`, (res) => {
+    const req = https.request(`https://nds.iaea.org/relnsd/v0/data?fields=${field}&nuclides=${nuclide}`, (res) => {
       if (res.statusCode != 200) {
-        reject(new Error('Status not ok'));
+        reject('Status not ok');
       }
 
       res.setEncoding('utf8');
-      let data = [];
+      let data = '';
+
       res.on('data', (chunk) => {
-        if (chunk.length == 2) {
-          reject(new Error(parseErrorCode(chunk)));
-        }
-        data.push(chunk);
+        data += chunk;
       });
 
       res.on('end', () => {
+        if (data.length <= 2) {
+          reject(parseErrorCode(data));
+        }
         resolve(data);
       });
     });
     
     req.on('error', (e) => {
-      reject(e);
+      reject('Request error');
     });
     
     req.end();
