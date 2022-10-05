@@ -1,13 +1,14 @@
 <form class="formula-input-form">
   <mat-form-field class="formula-input-full-width" appearance="fill">
-    <mat-label>Formula</mat-label>
-    <input type="text"
+    <mat-label id="lsd-id-formula-input-label">Formula</mat-label>
+    <input id="lsd-id-formula-input-input"
+            type="text"
             aria-label="Formula"
             matInput
             [formControl]="formulaControl"
             [matAutocomplete]="auto">
-    <mat-error *ngIf="formulaControl.errors?.['required']">Formula is required</mat-error>
-    <mat-error *ngIf="formulaControl.errors?.['pattern']">Invalid formula</mat-error>
+    <mat-error id="lsd-id-formula-input-error" *ngIf="formulaControl.errors?.['required']">Formula is required</mat-error>
+    <mat-error id="lsd-id-formula-input-error" *ngIf="formulaControl.errors?.['pattern']">Invalid formula</mat-error>
     <mat-autocomplete #auto="matAutocomplete">
       <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
         {{option}}
