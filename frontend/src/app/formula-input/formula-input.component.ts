@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { FormControl, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 
@@ -9,7 +9,7 @@ import { map, startWith } from 'rxjs/operators';
   styleUrls: ['./formula-input.component.scss']
 })
 export class FormulaInputComponent implements OnInit {
-  formulaControl = new FormControl('');
+  formulaControl = new FormControl('', [Validators.required, Validators.pattern(/^[a-zA-Z0-9]*$/)]);
   options: string[] = [];
   filteredOptions!: Observable<string[]>;
 
