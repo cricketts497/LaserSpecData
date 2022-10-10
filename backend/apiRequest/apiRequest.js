@@ -1,13 +1,7 @@
 const https = require('https');
+const csv = require('csvtojson');
 
-const parseErrorCode = (code) => {
-  if (code === '0\n') {
-    return 'Not found';
-  }
-  return 'Unknown error';
-}
-
-const get = (field, nuclide) => {
+const get = (nuclide, field) => {
   return new Promise((resolve, reject) => {
     const req = https.request(`https://nds.iaea.org/relnsd/v0/data?fields=${field}&nuclides=${nuclide}`, (res) => {
       if (res.statusCode != 200) {
@@ -15,18 +9,7 @@ const get = (field, nuclide) => {
       }
 
       res.setEncoding('utf8');
-      let data = '';
-
-      res.on('data', (chunk) => {
-        data += chunk;
-      });
-
-      res.on('end', () => {
-        if (data.length <= 2) {
-          reject(parseErrorCode(data));
-        }
-        resolve(data);
-      });
+      resolve(res);
     });
     
     req.on('error', (e) => {
@@ -37,14 +20,35 @@ const get = (field, nuclide) => {
   })
 }
 
-exports.getLevels = (nuclide) => {
-  return get('levels', nuclide);
+const getConverted = (nuclide, field, includeColumns) => {
+  return new Promise((resolve, reject) => {
+    get(nuclide, field)
+    .then((res) => {
+      const converted = [];
+      csv({ includeColumns: includeColumns })
+      .fromStream(res).subscribe((line) => {
+        converted.push(line);
+      },
+      (err) => reject('Conversion error'),
+      () => {
+        if (converted.length === 0) {
+          reject('No data');
+        }
+        resolve(converted);
+      });
+    })
+    .catch((err) => reject(err));
+  })
 }
 
 exports.getGroundStates = (nuclide) => {
-  return get('ground_states', nuclide);
+  return getConverted(nuclide, 'ground_states', /\b(z|n|symbol|jp|half_life|unc_hl|unit_hl|radius|unc_r|magnetic_dipole|unc_md|electric_quadrupole|unc_eq)\b/);
+}
+
+exports.getLevels = (nuclide) => {
+  return getConverted(nuclide, 'levels', /\b(z|n|symbol|jp|idx|energy|unc_e|half_life|unc_hl|unit_hl|magnetic_dipole|unc_mn|electric_quadrupole|unc_eq)\b/);
 }
 
 exports.getGammas = (nuclide) => {
-  return get('gammas', nuclide);
+  return getConverted(nuclide, 'gammas', /\b(z|n|symbol|start_level_idx|start_level_energy|unc_sle|end_level_idx|end_level_energy|unc_ele)\b/);
 }
