@@ -50,7 +50,15 @@ describe('TableDataConversionService', () => {
       const tableRow = service.getDataTableRow(dataRow);
 
       expect(tableRow.z).toBe('49');
-    })
+    });
+
+    it('should round non-integer values', () => {
+      dataRow.z = '59.6';
+
+      const tableRow = service.getDataTableRow(dataRow);
+
+      expect(tableRow.z).toBe('60');
+    });
   });
 
   describe('n data types', () => {
@@ -78,7 +86,15 @@ describe('TableDataConversionService', () => {
       const tableRow = service.getDataTableRow(dataRow);
 
       expect(tableRow.n).toBe('66');
-    })
+    });
+
+    it('should round non-integer values', () => {
+      dataRow.n = '76.3';
+
+      const tableRow = service.getDataTableRow(dataRow);
+
+      expect(tableRow.n).toBe('76');
+    });
   });
 
   describe('electric quadrupole data types', () => {
