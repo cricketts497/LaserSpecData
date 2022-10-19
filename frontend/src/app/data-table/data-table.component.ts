@@ -12,10 +12,10 @@ export class DataTableComponent {
   displayedColumns: string[] = ['symbol', 'z', 'n', 'jp', 'magnetic_dipole', 'electric_quadrupole']
   dataSource = new DataTableSource();
 
-  constructor() {
-    this.dataSource.addRow({z:'49', n:'66', symbol:'In', jp:'9/2+', magnetic_dipole:'4.123(3)', electric_quadrupole:'2.323'});
-    this.dataSource.addRow({z:'50', n:'66', symbol:'Sn', jp:'5+', magnetic_dipole:'5.234', electric_quadrupole:'0.123(1)'});
-  }
+  // constructor() {
+  //   this.dataSource.addRow({z:'49', n:'66', symbol:'In', jp:'9/2+', magnetic_dipole:'4.123(3)', electric_quadrupole:'2.323'});
+  //   this.dataSource.addRow({z:'50', n:'66', symbol:'Sn', jp:'5+', magnetic_dipole:'5.234', electric_quadrupole:'0.123(1)'});
+  // }
 }
 
 class DataTableSource extends DataSource<DataTableRow> {
